@@ -492,7 +492,6 @@ private:
 
 	String import_reload_fn;
 
-	HashSet<String> textfile_extensions;
 	HashSet<FileDialog *> file_dialogs;
 	HashSet<EditorFileDialog *> editor_file_dialogs;
 

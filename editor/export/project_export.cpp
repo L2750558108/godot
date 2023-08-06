@@ -861,9 +861,6 @@ bool ProjectExportDialog::_fill_tree(EditorFileSystemDirectory *p_dir, TreeItem 
 		if (p_export_filter == EditorExportPreset::EXPORT_SELECTED_SCENES && type != "PackedScene") {
 			continue;
 		}
-		if (type == "TextFile") {
-			continue;
-		}
 
 		TreeItem *file = include_files->create_item(p_item);
 		file->set_cell_mode(0, TreeItem::CELL_MODE_CHECK);

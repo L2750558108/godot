@@ -236,11 +236,6 @@ void InspectorDock::_load_resource(const String &p_type) {
 		load_resource_dialog->add_filter("*." + extensions[i], extensions[i].to_upper());
 	}
 
-	const Vector<String> textfile_ext = ((String)(EDITOR_GET("docks/filesystem/textfile_extensions"))).split(",", false);
-	for (int i = 0; i < textfile_ext.size(); i++) {
-		load_resource_dialog->add_filter("*." + textfile_ext[i], textfile_ext[i].to_upper());
-	}
-
 	load_resource_dialog->popup_file_dialog();
 }
 
@@ -248,11 +243,6 @@ void InspectorDock::_resource_file_selected(String p_file) {
 	Ref<Resource> res;
 	if (ResourceLoader::exists(p_file, "")) {
 		res = ResourceLoader::load(p_file);
-	} else {
-		const Vector<String> textfile_ext = ((String)(EDITOR_GET("docks/filesystem/textfile_extensions"))).split(",", false);
-		if (textfile_ext.has(p_file.get_extension())) {
-			res = ScriptEditor::get_singleton()->open_file(p_file);
-		}
 	}
 
 	if (res.is_null()) {
@@ -521,19 +511,18 @@ void InspectorDock::update(Object *p_object) {
 
 	const bool is_object = p_object != nullptr;
 	const bool is_resource = is_object && p_object->is_class("Resource");
-	const bool is_text_file = is_object && p_object->is_class("TextFile");
 	const bool is_node = is_object && p_object->is_class("Node");
 
-	object_menu->set_disabled(!is_object || is_text_file);
-	search->set_editable(is_object && !is_text_file);
-	resource_save_button->set_disabled(!is_resource || is_text_file);
-	open_docs_button->set_disabled(is_text_file || (!is_resource && !is_node));
+	object_menu->set_disabled(!is_object);
+	search->set_editable(is_object);
+	resource_save_button->set_disabled(!is_resource);
+	open_docs_button->set_disabled(!is_resource && !is_node);
 
 	PopupMenu *resource_extra_popup = resource_extra_button->get_popup();
-	resource_extra_popup->set_item_disabled(resource_extra_popup->get_item_index(RESOURCE_COPY), !is_resource || is_text_file);
-	resource_extra_popup->set_item_disabled(resource_extra_popup->get_item_index(RESOURCE_MAKE_BUILT_IN), !is_resource || is_text_file);
+	resource_extra_popup->set_item_disabled(resource_extra_popup->get_item_index(RESOURCE_COPY), !is_resource);
+	resource_extra_popup->set_item_disabled(resource_extra_popup->get_item_index(RESOURCE_MAKE_BUILT_IN), !is_resource);
 
-	if (!is_object || is_text_file) {
+	if (!is_object) {
 		info->hide();
 		object_selector->clear_path();
 		return;

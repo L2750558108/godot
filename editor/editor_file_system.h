@@ -223,7 +223,6 @@ class EditorFileSystem : public Node {
 
 	void _delete_internal_files(String p_file);
 
-	HashSet<String> textfile_extensions;
 	HashSet<String> valid_extensions;
 	HashSet<String> import_extensions;
 

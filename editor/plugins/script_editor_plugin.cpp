@@ -1101,12 +1101,6 @@ void ScriptEditor::_file_dialog_action(String p_file) {
 				}
 			}
 
-			if (EditorFileSystem::get_singleton()) {
-				if (textfile_extensions.has(p_file.get_extension())) {
-					EditorFileSystem::get_singleton()->update_file(p_file);
-				}
-			}
-
 			if (!open_textfile_after_create) {
 				return;
 			}
@@ -1190,9 +1184,6 @@ void ScriptEditor::_menu_option(int p_option) {
 			file_dialog_option = FILE_NEW_TEXTFILE;
 
 			file_dialog->clear_filters();
-			for (const String &E : textfile_extensions) {
-				file_dialog->add_filter("*." + E, E.to_upper());
-			}
 			file_dialog->popup_file_dialog();
 			file_dialog->set_title(TTR("New Text File..."));
 			open_textfile_after_create = true;
@@ -1209,9 +1200,6 @@ void ScriptEditor::_menu_option(int p_option) {
 				file_dialog->add_filter("*." + extensions[i], extensions[i].to_upper());
 			}
 
-			for (const String &E : textfile_extensions) {
-				file_dialog->add_filter("*." + E, E.to_upper());
-			}
 
 			file_dialog->popup_file_dialog();
 			file_dialog->set_title(TTR("Open File"));
@@ -2755,11 +2743,6 @@ void ScriptEditor::_save_layout() {
 }
 
 void ScriptEditor::_editor_settings_changed() {
-	textfile_extensions.clear();
-	const Vector<String> textfile_ext = ((String)(EDITOR_GET("docks/filesystem/textfile_extensions"))).split(",", false);
-	for (const String &E : textfile_ext) {
-		textfile_extensions.insert(E);
-	}
 
 	trim_trailing_whitespace_on_save = EDITOR_GET("text_editor/behavior/files/trim_trailing_whitespace_on_save");
 	convert_indent_on_save = EDITOR_GET("text_editor/behavior/files/convert_indent_on_save");
@@ -2974,13 +2957,6 @@ bool ScriptEditor::can_drop_data_fw(const Point2 &p_point, const Variant &p_data
 				}
 			}
 
-			if (textfile_extensions.has(file.get_extension())) {
-				Error err;
-				Ref<TextFile> text_file = _load_text_file(file, &err);
-				if (text_file.is_valid() && err == OK) {
-					return true;
-				}
-			}
 		}
 		return false;
 	}
@@ -3048,7 +3024,7 @@ void ScriptEditor::drop_data_fw(const Point2 &p_point, const Variant &p_data, Co
 				continue;
 			}
 
-			if (!ResourceLoader::exists(file, "Script") && !ResourceLoader::exists(file, "JSON") && !textfile_extensions.has(file.get_extension())) {
+			if (!ResourceLoader::exists(file, "Script") && !ResourceLoader::exists(file, "JSON")) {
 				continue;
 			}
 

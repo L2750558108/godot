@@ -377,9 +377,6 @@ void EditorExportPlatform::_export_find_resources(EditorFileSystemDirectory *p_d
 	}
 
 	for (int i = 0; i < p_dir->get_file_count(); i++) {
-		if (p_dir->get_file_type(i) == "TextFile") {
-			continue;
-		}
 		p_paths.insert(p_dir->get_file_path(i));
 	}
 }
@@ -391,9 +388,6 @@ void EditorExportPlatform::_export_find_customized_resources(const Ref<EditorExp
 	}
 
 	for (int i = 0; i < p_dir->get_file_count(); i++) {
-		if (p_dir->get_file_type(i) == "TextFile") {
-			continue;
-		}
 		String path = p_dir->get_file_path(i);
 		EditorExportPreset::FileExportMode file_mode = p_preset->get_file_export_mode(path, p_mode);
 		if (file_mode != EditorExportPreset::MODE_FILE_REMOVE) {

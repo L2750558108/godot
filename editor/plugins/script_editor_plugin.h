@@ -479,7 +479,6 @@ class ScriptEditor : public PanelContainer {
 	Ref<Script> _get_current_script();
 	TypedArray<Script> _get_open_scripts() const;
 
-	HashSet<String> textfile_extensions;
 	Ref<TextFile> _load_text_file(const String &p_path, Error *r_error) const;
 	Error _save_text_file(Ref<TextFile> p_text_file, const String &p_path);
 
