@@ -74,3 +74,23 @@ Error TextFile::load_text(const String &p_path) {
 #endif // TOOLS_ENABLED
 	return OK;
 }
+
+Error TextFile::save_text(const String &p_path) {
+	Vector<uint8_t> sourcef;
+	Error err;
+	Ref<FileAccess> f = FileAccess::open(p_path, FileAccess::WRITE, &err);
+
+	ERR_FAIL_COND_V_MSG(err, err, "Cannot open TextFile '" + p_path + "'.");
+
+	f->store_string(text);
+
+	return OK;
+}
+
+void TextFile::_bind_methods()
+{
+	ClassDB::bind_method(D_METHOD("has_text"),&TextFile::has_text);
+	ClassDB::bind_method(D_METHOD("get_text"),&TextFile::get_text);
+	ClassDB::bind_method(D_METHOD("set_text","text"),&TextFile::set_text);
+	ADD_PROPERTY(PropertyInfo(Variant::STRING, "text",PROPERTY_HINT_MULTILINE_TEXT),"set_text","get_text");
+}

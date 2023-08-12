@@ -273,11 +273,16 @@
 #include "scene/3d/voxel_gi.h"
 #include "scene/3d/world_environment.h"
 #include "scene/3d/xr_nodes.h"
+#include "scene/resources/resource_format_saver_text_file.h"
+#include "scene/resources/resource_format_loader_text_file.h"
 #include "scene/resources/environment.h"
 #include "scene/resources/fog_material.h"
 #include "scene/resources/importer_mesh.h"
 #include "scene/resources/mesh_library.h"
 #endif // _3D_DISABLED
+
+static Ref<ResourceFormatSaverTextFile> resource_saver_text_file;
+static Ref<ResourceFormatLoaderTextFile> resource_loader_text_file;
 
 static Ref<ResourceFormatSaverText> resource_saver_text;
 static Ref<ResourceFormatLoaderText> resource_loader_text;
@@ -300,6 +305,12 @@ void register_scene_types() {
 	OS::get_singleton()->yield(); // may take time to init
 
 	Node::init_node_hrcr();
+
+	resource_loader_text_file.instantiate();
+	ResourceLoader::add_resource_format_loader(resource_loader_text_file);
+	
+	resource_saver_text_file.instantiate();
+	ResourceSaver::add_resource_format_saver(resource_saver_text_file);
 
 	resource_loader_stream_texture.instantiate();
 	ResourceLoader::add_resource_format_loader(resource_loader_stream_texture);
@@ -331,6 +342,8 @@ void register_scene_types() {
 	OS::get_singleton()->yield(); // may take time to init
 
 	GDREGISTER_CLASS(Object);
+
+	GDREGISTER_CLASS(TextFile);
 
 	GDREGISTER_CLASS(Node);
 	GDREGISTER_VIRTUAL_CLASS(MissingNode);

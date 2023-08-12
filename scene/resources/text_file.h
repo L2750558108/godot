@@ -52,6 +52,9 @@ public:
 
 	void set_file_path(const String &p_path) { path = p_path; }
 	Error load_text(const String &p_path);
+	Error save_text(const String &p_path);
+
+	static void _bind_methods();
 };
 
 #endif // TEXT_FILE_H
