@@ -14,12 +14,16 @@ Ref<Resource> ResourceFormatLoaderTextFile::load(const String &p_path, const Str
 
 void ResourceFormatLoaderTextFile::get_recognized_extensions(List<String> *r_extensions) const {
     if (!r_extensions->find("txt")) {
-            r_extensions->push_back("txt");
+	    r_extensions->push_back("txt");
     }
 }
 
 String ResourceFormatLoaderTextFile::get_resource_type(const String &p_path) const {
-    return "TextFile";
+    String el = p_path.get_extension().to_lower();
+	if (el == "txt") {
+		return "TextFile";
+	}
+	return "";
 }
 
 bool ResourceFormatLoaderTextFile::handles_type(const String &p_type) const {
