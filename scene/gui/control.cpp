@@ -884,7 +884,11 @@ void Control::_compute_offsets(Rect2 p_rect, const real_t p_anchors[4], real_t (
 void Control::_compute_edge_positions(Rect2 p_rect, real_t (&r_edge_positions)[4]) {
 	for (int i = 0; i < 4; i++) {
 		real_t area = p_rect.size[i & 1];
-		r_edge_positions[i] = data.offset[i] + (data.anchor[i] * area);
+		if (is_layout_rtl() && i % 2 == 0) {
+			int temp = (i + 2) % 4;
+			r_edge_positions[i] = - data.offset[temp] + ((1 - data.anchor[temp]) * area);
+		}
+		else r_edge_positions[i] = data.offset[i] + (data.anchor[i] * area);
 	}
 }
 
@@ -1730,10 +1734,6 @@ void Control::_size_changed() {
 		}
 
 		new_size_cache.width = minimum_size.width;
-	}
-
-	if (is_layout_rtl()) {
-		new_pos_cache.x = parent_rect.size.x + 2 * parent_rect.position.x - new_pos_cache.x - new_size_cache.x;
 	}
 
 	if (minimum_size.height > new_size_cache.height) {
